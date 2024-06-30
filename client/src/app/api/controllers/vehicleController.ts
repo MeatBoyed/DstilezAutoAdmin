@@ -6,10 +6,7 @@ import { validator } from "hono/validator";
 // import {  parseFormData } from "@/lib/FormUtils";
 import { zValidator } from "@hono/zod-validator";
 
-const app = new Hono();
-
-// Fetch Agent's Products - Private Endpoint
-app.get("/", async (c) => {
+export default new Hono().get("/", async (c) => {
   return c.json(
     await db.vehicle.findMany({
       where: { title: { not: "107" } },
@@ -220,5 +217,3 @@ app.get("/", async (c) => {
 //     );
 //   }
 // );
-
-export default app;

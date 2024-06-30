@@ -2,12 +2,21 @@
 
 import useSWR from "swr";
 import { useMemo } from "react";
-import { cn, fetcher } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { VehicleCard, VehicleCardSkeleton } from "@/components/VehicleEditCard";
 import { Vehicle } from "@prisma/client";
+import { InferRequestType } from "hono";
+import { honoClient } from "../api/[[...route]]/route";
 
 export default function Vehicles({ className }: { className?: string }) {
-  const { data, error, isLoading } = useSWR<Vehicle[]>("/api/vehicle", fetcher);
+  const $get = honoClient.vehicle.$get;
+  const fetcher = (arg: InferRequestType<typeof $get>) => async () =>
+    await $get(arg).then(async (res) => await res.json());
+
+  const { data, error, isLoading } = useSWR<Vehicle[]>(
+    "get-vehicles",
+    fetcher({})
+  );
 
   const vehicles = useMemo(
     () =>
