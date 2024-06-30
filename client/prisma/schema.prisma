@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+}
+
+model Account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Consignment {
+  id               String   @id
+  customerId       String
+  make             String
+  model            String
+  milage           Int
+  variant          String
+  extras           String
+  fuelType         String
+  condition        String
+  transmission     String
+  registrationYear Int
+  duration         String
+  expectedPrice    Int
+  Customer         Customer @relation(fields: [customerId], references: [id])
+}
+
+model Customer {
+  id                 String        @id
+  name               String
+  surname            String
+  email              String
+  phoneNumber        String        @unique
+  countryCallingCode String
+  Consignment        Consignment[]
+  Lead               Lead[]
+}
+
+model Lead {
+  id               String    @id
+  stockId          Int?
+  customerId       String?
+  status           String
+  willTrade        Boolean
+  requireFinance   Boolean
+  requireRentToOwn Boolean
+  enquiryDate      DateTime  @default(now())
+  Customer         Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  Vehicle          Vehicle?  @relation(fields: [stockId], references: [stockId], onDelete: Cascade)
+}
+
+model NewLead {
+  id                 String   @id
+  stockId            Int
+  title              String
+  firstname          String
+  lastname           String
+  email              String
+  phoneNumber        String
+  countryCallingCode String
+  status             String
+  enquireDate        DateTime @default(now())
+  message            String
+}
+
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  Account       Account[]
+  Session       Session[]
+}
+
+model Vehicle {
+  // Meta 
+  stockId      Int      @id @unique
+  title        String
+  price        Float
+
+  // Core
+  make         String
+  model        String
+  variant      String
+  milage       Int
+  year         Int
+  
+  // Detials
+  transmission String
+  fuelType     String
+  extras       String[]
+  condition    String // Hidden
+  bodyType     String
+  color        String
+
+  images       String[]
+
+  newUsed      String // Hidden
+  mmCode       Int // Hidden
+  Lead         Lead[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
