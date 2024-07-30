@@ -6,7 +6,6 @@ import { Trash2 } from "lucide-react";
 import { DragDropContext, Draggable, DraggableProvided, Droppable, DropResult } from "@hello-pangea/dnd";
 import { FileState } from "./Utils";
 import { EmptyCard } from "./EmptyCard";
-import { twMerge } from "tailwind-merge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useContext, useMemo } from "react";
 import { UploadContext, UploadContextType } from "./hooks/uploadContext";
@@ -35,7 +34,7 @@ const UploadedFiles = React.forwardRef<HTMLDialogElement, UploadedFilesCard>(({ 
     } else {
       <EmptyCard title="No files uploaded" description="Upload some files to see them here" className="w-full" />;
     }
-  }, [uploadedImages, handleDelete]);
+  }, [uploadedImages]);
 
   return (
     <div className="flex justify-center items-start flex-col w-full gap-5 ">

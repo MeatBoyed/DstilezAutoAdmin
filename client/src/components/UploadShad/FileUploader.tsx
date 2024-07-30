@@ -185,7 +185,7 @@ const FileUploader = React.forwardRef<HTMLInputElement, FileUploaderProps>((prop
       }
     },
 
-    [files, maxFiles, maxSize, multiple, handleUpload, setFiles, uploadedImages?.length]
+    [files, maxFiles, maxSize, multiple, handleUpload, setFiles]
   );
 
   function onRemove(index: number) {
@@ -314,8 +314,6 @@ const FileCard = React.forwardRef<HTMLDivElement, FileCardProps>(({ className, f
   );
 });
 FileCard.displayName = "FileCard";
-
-export { FileCard };
 
 function isFileWithPreview(file: File): file is File & { preview: string } {
   return "preview" in file && typeof file.preview === "string";

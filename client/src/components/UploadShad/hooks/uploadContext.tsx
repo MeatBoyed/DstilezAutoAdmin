@@ -39,7 +39,7 @@ export const UploadContextProvider: React.FC<{
       setUploadedImages(newFileStates);
       handleChange(convertUploadedImages(newFileStates));
     }
-  }, [defaultImages, defaultImages?.length, handleChange]);
+  }, []);
 
   const handleUpload = async (files: File[]) => {
     // Add and convert File to FileState
