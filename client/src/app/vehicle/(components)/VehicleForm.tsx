@@ -39,7 +39,7 @@ import {
 import { Vehicle } from "@prisma/client";
 import { DeleteVehicle, PostVehicle } from "@/server/requestLib";
 import { toast } from "sonner";
-import { ImagesInput } from "@/components/Upload-Shad/main/ImagesInput";
+import { UploadShad } from "@/components/UploadShad/main";
 import { HTTPException } from "hono/http-exception";
 
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {
@@ -586,7 +586,7 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
                         <FormItem>
                           <FormMessage />
                           <FormControl className="px-0 sm:px-2 sm:pb-4">
-                            <ImagesInput
+                            <UploadShad
                               maxFiles={MAXFILES}
                               maxSize={5 * 1024 * 1024}
                               defaultValues={initVehicle ? field.value : []}

@@ -4,8 +4,8 @@ import { HTTPException } from "hono/http-exception";
 import { validator } from "hono/validator";
 import { ParseVehicleFormData } from "../util/FormDataConverters";
 import { createVehicleObject } from "../util/utils";
-import { PostImageError, PostImagesResponse, UploadedImages } from "@/components/Upload-Shad/main/server/honoS3Types";
-import { DeleteImagesInS3, PostImagesToS3 } from "@/components/Upload-Shad/main/server/HonoS3";
+import { PostImageError, PostImagesResponse, UploadedImages } from "@/components/UploadShad/server/honoS3Types";
+import { DeleteImagesInS3, PostImagesToS3 } from "@/components/UploadShad/server/HonoS3";
 import { getAuth } from "@hono/clerk-auth";
 import { PaginationRequest } from "../util/BusinessLogic";
 

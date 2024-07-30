@@ -1,12 +1,9 @@
-import { UploadedImages } from "@/components/Upload-Shad/main/server/honoS3Types";
+import { UploadedImages } from "@/components/UploadShad/server/honoS3Types";
 import { VehicleFormSchema } from "@/lib/Formlibs";
 import { Vehicle } from "@prisma/client";
 import { z } from "zod";
 
-export function createVehicleObject(
-  vehicle: z.infer<typeof VehicleFormSchema>,
-  images: UploadedImages[]
-): Vehicle {
+export function createVehicleObject(vehicle: z.infer<typeof VehicleFormSchema>, images: UploadedImages[]): Vehicle {
   return {
     //   Meta
     stockId: vehicle.stockId,
