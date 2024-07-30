@@ -1,14 +1,20 @@
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import vehicleController from "../controllers/vehicleController";
 import { hc } from "hono/client";
+import { logger } from "hono/logger";
+import { clerkMiddleware } from "@hono/clerk-auth";
 
-// Increase performance by using either Drizzle, or Prisma Accelerate
-// export const runtime = "edge";
+import feedbackController from "@/server/controllers/feedbackController";
+import vehicleController from "../../../server/controllers/vehicleController";
 
-// app.use(clerkMiddleware());
+const BASE_URL = process.env.NEXT_PUBLIC_HOST_URL;
+if (BASE_URL === undefined) throw new Error("NEXT_PUBLIC_HOST_URL is undefined");
 
-const routes = new Hono().route("/vehicle", vehicleController);
+const routes = new Hono()
+  .use(logger())
+  .use(clerkMiddleware())
+  .route("/vehicles", vehicleController)
+  .route("/feedback", feedbackController);
 const app = new Hono().basePath("/api").route("/", routes);
 
 // export type AppType = typeof routes;
@@ -17,3 +23,4 @@ export const GET = handle(app);
 export const POST = handle(app);
 
 export const honoClient = hc<typeof routes>("/api");
+export const honoRPCClient = hc<typeof routes>(`${BASE_URL}/api`);

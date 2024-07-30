@@ -76,7 +76,6 @@ export const Makes = [
   "Volkswagen",
   "Volvo",
 ] as const;
-
 export const Colours = [
   "AliceBlue",
   "AntiqueWhite",
@@ -227,7 +226,6 @@ export const Colours = [
   "Yellow",
   "YellowGreen",
 ] as const;
-
 export const BodyTypes = [
   "Coupe",
   "Coupe-SUV",
@@ -241,7 +239,6 @@ export const BodyTypes = [
   "Sedan",
   "Bukkie",
 ] as const;
-
 export const Extras = [
   "4 Wheel Drive",
   "A/C",
@@ -293,27 +290,282 @@ export const Extras = [
   "USB",
   "Xenon Lights",
 ] as const;
-
 export const Transmissions = ["Manual", "Automatic"] as const;
 export const FuelTypes = ["Petrol", "Diesel", "Electric"] as const;
+export const NewOrUsed = ["New", "Used"] as const;
+
+export const FilterMakes = [
+  "Select makes",
+  "Abarth",
+  "Alfa Romeo",
+  "Aston Martin",
+  "Audi",
+  "Bentley",
+  "BMW",
+  "Bugatti",
+  "Cadillac",
+  "Chevrolet",
+  "Chrysler",
+  "Citroën",
+  "Dacia",
+  "Daewoo",
+  "Daihatsu",
+  "Datsun",
+  "Dodge",
+  "Donkervoort",
+  "DS",
+  "Ferrari",
+  "Fiat",
+  "Fisker",
+  "Ford",
+  "Haval",
+  "Honda",
+  "Hummer",
+  "Hyundai",
+  "Infiniti",
+  "Isuzu",
+  "Iveco",
+  "Jaguar",
+  "Jeep",
+  "JMC",
+  "Kia",
+  "KTM",
+  "Lada",
+  "Lamborghini",
+  "Lancia",
+  "Land Rover",
+  "Landwind",
+  "Lexus",
+  "Lotus",
+  "Mahindra",
+  "MAN",
+  "Maserati",
+  "Maybach",
+  "Mazda",
+  "McLaren",
+  "Mercedes-Benz",
+  "MG",
+  "Mini",
+  "Mitsubishi",
+  "Morgan",
+  "Nissan",
+  "Opel",
+  "Peugeot",
+  "Porsche",
+  "Renault",
+  "Rolls-Royce",
+  "Rover",
+  "Saab",
+  "Seat",
+  "Skoda",
+  "Smart",
+  "SsangYong",
+  "Subaru",
+  "Suzuki",
+  "Tata",
+  "Tesla",
+  "Toyota",
+  "Volkswagen",
+  "Volvo",
+] as const;
+export const FilterBodyTypes = [
+  "Select body types",
+  "Coupe",
+  "Coupe-SUV",
+  "Convertible",
+  "Estate",
+  "4 Door Coupe",
+  "Hatchback",
+  "MPV",
+  "Saloon",
+  "SUV",
+  "Sedan",
+  "Bukkie",
+] as const;
+export const FilterColours = [
+  "Select colours",
+  "AliceBlue",
+  "AntiqueWhite",
+  "Aqua",
+  "Aquamarine",
+  "Azure",
+  "Beige",
+  "Bisque",
+  "Black",
+  "BlanchedAlmond",
+  "Blue",
+  "BlueViolet",
+  "Brown",
+  "BurlyWood",
+  "CadetBlue",
+  "Chartreuse",
+  "Chocolate",
+  "Coral",
+  "CornflowerBlue",
+  "Cornsilk",
+  "Crimson",
+  "Cyan",
+  "DarkBlue",
+  "DarkCyan",
+  "DarkGoldenRod",
+  "DarkGray",
+  "DarkGrey",
+  "DarkGreen",
+  "DarkKhaki",
+  "DarkMagenta",
+  "DarkOliveGreen",
+  "DarkOrange",
+  "DarkOrchid",
+  "DarkRed",
+  "DarkSalmon",
+  "DarkSeaGreen",
+  "DarkSlateBlue",
+  "DarkSlateGray",
+  "DarkSlateGrey",
+  "DarkTurquoise",
+  "DarkViolet",
+  "DeepPink",
+  "DeepSkyBlue",
+  "DimGray",
+  "DimGrey",
+  "DodgerBlue",
+  "FireBrick",
+  "FloralWhite",
+  "ForestGreen",
+  "Fuchsia",
+  "Gainsboro",
+  "GhostWhite",
+  "Gold",
+  "GoldenRod",
+  "Gray",
+  "Grey",
+  "Green",
+  "GreenYellow",
+  "HoneyDew",
+  "HotPink",
+  "IndianRed",
+  "Indigo",
+  "Ivory",
+  "Khaki",
+  "Lavender",
+  "LavenderBlush",
+  "LawnGreen",
+  "LemonChiffon",
+  "LightBlue",
+  "LightCoral",
+  "LightCyan",
+  "LightGoldenRodYellow",
+  "LightGray",
+  "LightGrey",
+  "LightGreen",
+  "LightPink",
+  "LightSalmon",
+  "LightSeaGreen",
+  "LightSkyBlue",
+  "LightSlateGray",
+  "LightSlateGrey",
+  "LightSteelBlue",
+  "LightYellow",
+  "Lime",
+  "LimeGreen",
+  "Linen",
+  "Magenta",
+  "Maroon",
+  "MediumAquaMarine",
+  "MediumBlue",
+  "MediumOrchid",
+  "MediumPurple",
+  "MediumSeaGreen",
+  "MediumSlateBlue",
+  "MediumSpringGreen",
+  "MediumTurquoise",
+  "MediumVioletRed",
+  "MidnightBlue",
+  "MintCream",
+  "MistyRose",
+  "Moccasin",
+  "NavajoWhite",
+  "Navy",
+  "OldLace",
+  "Olive",
+  "OliveDrab",
+  "Orange",
+  "OrangeRed",
+  "Orchid",
+  "PaleGoldenRod",
+  "PaleGreen",
+  "PaleTurquoise",
+  "PaleVioletRed",
+  "PapayaWhip",
+  "PeachPuff",
+  "Peru",
+  "Pink",
+  "Plum",
+  "PowderBlue",
+  "Purple",
+  "RebeccaPurple",
+  "Red",
+  "RosyBrown",
+  "RoyalBlue",
+  "SaddleBrown",
+  "Salmon",
+  "SandyBrown",
+  "SeaGreen",
+  "SeaShell",
+  "Sienna",
+  "Silver",
+  "SkyBlue",
+  "SlateBlue",
+  "SlateGray",
+  "SlateGrey",
+  "Snow",
+  "SpringGreen",
+  "SteelBlue",
+  "Tan",
+  "Teal",
+  "Thistle",
+  "Tomato",
+  "Turquoise",
+  "Violet",
+  "Wheat",
+  "White",
+  "WhiteSmoke",
+  "Yellow",
+  "YellowGreen",
+] as const;
+export const FilterTransmissions = ["Select transmission", "Manual", "Automatic"] as const;
+export const FilterFuelTypes = ["Select fuel type", "Petrol", "Diesel", "Electric"] as const;
+export const FilterSelectFuelTypes: Option[] = FilterFuelTypes.map((option, index) => {
+  return { key: `Make ${index} ${option}`, value: option };
+});
+export const FilterSelectTransmissions: Option[] = FilterTransmissions.map((option, index) => {
+  return { key: `Make ${index} ${option}`, value: option };
+});
+export const FilterSelectMakes: Option[] = FilterMakes.map((option, index) => {
+  return { key: `Make ${index} ${option}`, value: option };
+});
+export const FilterSelectColours: Option[] = FilterColours.map((option, index) => {
+  return { key: `Make ${index} ${option}`, value: option };
+});
+export const FilterSelectBodyTypes: Option[] = FilterBodyTypes.map((option, index) => {
+  return { key: `Make ${index} ${option}`, value: option };
+});
 
 export const SelectMakes: Option[] = Makes.map((option, index) => {
-  return { key: `${index} ${option}`, value: option };
+  return { key: `Make ${index} ${option}`, value: option };
 });
 export const SelectColours: Option[] = Colours.map((option, index) => {
-  return { key: `${index} ${option}`, value: option };
+  return { key: `Colour ${index} ${option}`, value: option };
 });
 export const SelectBodyTypes: Option[] = BodyTypes.map((option, index) => {
-  return { key: `${index} ${option}`, value: option };
+  return { key: `Body types ${index} ${option}`, value: option };
 });
 export const SelectExtras: Option[] = Extras.map((option, index) => {
-  return { key: `${index} ${option}`, value: option };
+  return { key: `Extra ${index} ${option}`, value: option };
 });
-export const SelectTransmissions: Option[] = Transmissions.map(
-  (option, index) => {
-    return { key: `${index} ${option}`, value: option };
-  }
-);
+export const SelectTransmissions: Option[] = Transmissions.map((option, index) => {
+  return { key: `Transmission ${index} ${option}`, value: option };
+});
 export const SelectFuelTypes: Option[] = FuelTypes.map((option, index) => {
-  return { key: `${index} ${option}`, value: option };
+  return { key: `Fuel Type ${index} ${option}`, value: option };
 });
