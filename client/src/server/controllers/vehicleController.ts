@@ -19,7 +19,7 @@ if (AWS_S3_BASE_URL === undefined) {
 
 export default new Hono()
   /**
-   * Path ---> "/api/vehicles"
+   * Path ---> "/api/vehicles?searchquery"
    * GET all vehicles
    */
   .get("/", async (c) => {
@@ -41,6 +41,14 @@ export default new Hono()
         },
         sortBy: order,
         // TODO implement WHere
+      })
+    );
+  })
+  .get("/genParams", async (c) => {
+    return c.json(
+      await db.vehicle.findMany({
+        where: { title: { not: "107" } },
+        select: { stockId: true },
       })
     );
   })
@@ -89,6 +97,7 @@ export default new Hono()
       }
     }
   )
+
   /**
    * Path ---> "/api/vehicles/:stockId"
    * GET specific vehicle
@@ -96,11 +105,11 @@ export default new Hono()
   .get("/:stockid", async (c) => {
     await authenticateUser(c);
     const stockId = parseInt(c.req.param("stockid"));
-    return c.json(
-      await db.vehicle.findUnique({
-        where: { stockId: stockId, title: { not: "107" } },
-      })
-    );
+    const vehicle = await db.vehicle.findUnique({
+      where: { stockId: stockId, title: { not: "107" } },
+    });
+    if (!vehicle) throw new HTTPException(404, { message: "Vehicle not found" });
+    return c.json(vehicle);
   })
   /**
    * Path ---> "/api/vehicles/:stockId"

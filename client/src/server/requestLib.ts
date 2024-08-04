@@ -1,13 +1,7 @@
-import { honoClient } from "@/app/api/[[...route]]/route";
 import { VehicleFormSchema } from "@/lib/Formlibs";
-import { InferRequestType } from "hono";
 import { VehicleToFormData } from "./util/FormDataConverters";
 import { z } from "zod";
 import { FeedBackFormSchema } from "./controllers/feedbackController";
-
-// const $put = honoClient.vehicle.create.$put;
-// export const PostVehicle = (arg: InferRequestType<typeof $put>) => async () =>
-//   await $put(arg).then(async (res) => await res.json());
 
 export async function PostVehicle(
   url: string,

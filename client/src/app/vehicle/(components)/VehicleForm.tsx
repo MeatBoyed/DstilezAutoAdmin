@@ -1,13 +1,13 @@
 "use client";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tag, TagInput } from "emblor";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Eye, LoaderCircle, Save, Trash2 } from "lucide-react";
+import { ChevronLeft, Eye, LoaderCircle, Save, Trash2, XCircle } from "lucide-react";
 
 import { z } from "zod";
 import { useEffect, useState } from "react";
@@ -41,9 +41,26 @@ import { DeleteVehicle, PostVehicle } from "@/server/requestLib";
 import { toast } from "sonner";
 import { UploadShad } from "@/components/UploadShad/main";
 import { HTTPException } from "hono/http-exception";
+import { Badge } from "@/components/ui/badge";
+import { s3Converter } from "@/server/util/BusinessLayer";
 
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {
   const router = useRouter();
+
+  const getExtras = (extras: string[]) => {
+    console.log("Extras: ", extras.length);
+    // Check if extras is a single string
+    if (extras.length < 2 && extras[0]?.split(",").length > 0) {
+      const newExtras = extras[0]?.split(",");
+      return newExtras.map((value, i) => {
+        return { id: i.toString(), text: value };
+      });
+    }
+
+    return extras.map((value, i) => {
+      return { id: i.toString(), text: value };
+    });
+  };
 
   const defaultValues: z.infer<typeof VehicleFormSchema> = {
     stockId: initVehicle?.stockId || 0,
@@ -57,11 +74,7 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
     color: initVehicle ? Colours.find((value) => value === initVehicle.color) || "Black" : "White",
     transmission: initVehicle ? Transmissions.find((value) => value === initVehicle.transmission) || "Manual" : "Automatic",
     fuelType: initVehicle ? FuelTypes.find((value) => value === initVehicle.fuelType) || "Electric" : "Petrol",
-    extras: initVehicle
-      ? initVehicle.extras.map((value, i) => {
-          return { id: i.toString(), text: value };
-        })
-      : [],
+    extras: initVehicle ? getExtras(initVehicle.extras) : [],
     condition: initVehicle?.condition || "",
     images: initVehicle?.images || [],
     bodyType: initVehicle ? BodyTypes.find((value) => value === initVehicle.bodyType) || "Convertible" : "Hatchback",
@@ -551,19 +564,54 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
                               <TagInput
                                 {...field}
                                 clearAll
+                                customTagRenderer={(tag, isActiveTag) => (
+                                  <Badge
+                                    key={tag.id}
+                                    className="flex  px-2 py-1 justify-center items-center gap-4 border bg-slate-100 rounded-md shadow-md text-black hover:cursor-pointer"
+                                  >
+                                    <p className="leading-7">{tag.text}</p>
+                                    <XCircle
+                                      onClick={() =>
+                                        setValue(
+                                          "extras",
+                                          form.getValues("extras").filter((t) => tag.id != t.id)
+                                        )
+                                      }
+                                      size={18}
+                                    />
+                                  </Badge>
+                                )}
                                 variant="Primary"
                                 sortTags={true}
-                                includeTagsInInput={false}
+                                includeTagsInInput={true}
                                 activeTagIndex={activeExtraTagIndex}
                                 setActiveTagIndex={setActiveExtraTagIndex}
                                 placeholder="Enter a feature"
                                 tags={field.value}
-                                className=" w-full "
+                                allowDuplicates={false}
+                                className=" w-full overflow-auto "
+                                styleClasses={{
+                                  input: "border border-gray-300 py-5",
+                                  inlineTagsContainer: "",
+                                  tagPopover: {
+                                    popoverContent: "bg-white shadow-lg",
+                                    popoverTrigger: "text-blue-500 hover:text-blue-600",
+                                  },
+                                  tagList: {
+                                    container: "bg-red-100",
+                                    sortableList: "",
+                                  },
+                                  tag: {
+                                    body: "flex items-center gap-2",
+                                    closeButton: "text-red-500 hover:text-red-600",
+                                  },
+                                }}
                                 setTags={(newTags) => {
                                   setValue("extras", newTags as [Tag, ...Tag[]]);
                                 }}
                               />
                             </FormControl>
+                            <FormDescription>(Press enter to add)</FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -598,6 +646,7 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
                                 }
                                 setValue("images", uploadedImages.newImages); // Stores Uploaded Files
                               }}
+                              customLoader={s3Converter}
                             />
                           </FormControl>
                         </FormItem>

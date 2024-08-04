@@ -18,7 +18,6 @@ export const FeedBackFormSchema = z.object({
 
 // const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_API_KEY = "re_HRYCSX9u_C4NTyRd3uTjSWPUeHXC1mkEM";
-console.log("RESEND_API_KEY: ", RESEND_API_KEY);
 if (RESEND_API_KEY === undefined) {
   throw new Error("RESEND_API_KEY is undefined");
 }

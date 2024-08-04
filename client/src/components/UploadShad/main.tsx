@@ -3,16 +3,18 @@ import { cn } from "./FileInputUtils";
 import React from "react";
 import { UploadContextProvider } from "./hooks/uploadContext";
 import { UploadedFiles } from "./UploadedFiles";
+import { ImageLoaderProps } from "next/image";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface UploadShadProps extends React.InputHTMLAttributes<HTMLInputElement> {
   defaultValues?: string[];
   maxFiles: number;
   maxSize: number;
   handleChange: (uploadedImages: { newImages: File[]; order: string[] }, deletedImages?: string[], newImages?: File[]) => void;
+  customLoader?: (props: ImageLoaderProps) => string;
 }
 
-const UploadShad = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, defaultValues, handleChange, maxFiles, maxSize, ...props }, ref) => {
+const UploadShad = React.forwardRef<HTMLInputElement, UploadShadProps>(
+  ({ className, type, defaultValues, handleChange, maxFiles, maxSize, customLoader, ...props }, ref) => {
     return (
       <UploadContextProvider defaultImages={defaultValues} handleChange={handleChange}>
         <div className={cn("w-full flex justify-center items-center gap-5 flex-col", className)}>
@@ -33,7 +35,7 @@ const UploadShad = React.forwardRef<HTMLInputElement, InputProps>(
           {/* Handle when max inputted files is reached */}
           {/* Controlled By Context */}
           <FileUploader maxFiles={maxFiles} maxSize={maxSize} multiple />
-          <UploadedFiles />
+          <UploadedFiles customLoader={customLoader} />
         </div>
       </UploadContextProvider>
     );
@@ -41,4 +43,4 @@ const UploadShad = React.forwardRef<HTMLInputElement, InputProps>(
 );
 UploadShad.displayName = "ImagesInput";
 
-export { UploadShad };
+export { UploadShad, type UploadShadProps };

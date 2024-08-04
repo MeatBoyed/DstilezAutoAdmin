@@ -6,6 +6,7 @@ import { Card, CardContent } from "../../components/ui/card";
 import { cn } from "@/lib/utils";
 import { Vehicle } from "@prisma/client";
 import { AspectRatio } from "../../components/ui/aspect-ratio";
+import { s3Converter } from "@/server/util/BusinessLayer";
 
 export function VehicleCard({ vehicle, className }: { vehicle: Vehicle; className?: string }) {
   const VehiclePath = `/vehicle/${vehicle.stockId}`;
@@ -19,6 +20,7 @@ export function VehicleCard({ vehicle, className }: { vehicle: Vehicle; classNam
               alt={`${vehicle.title} Thumbnail`}
               fill
               quality={35}
+              loader={s3Converter}
               className="rounded-md object-cover"
             />
           </AspectRatio>
