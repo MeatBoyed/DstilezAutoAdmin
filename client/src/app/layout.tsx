@@ -27,7 +27,7 @@ export default async function RootLayout({
         <main className="w-full flex justify-center items-center flex-col gap-10">
           <ClerkProvider>
             <Navbar />
-            <div className="flex justify-center items-center px-4  w-full sm:max-w-3xl lg:max-w-5xl xl:px-0 min-h-screen">
+            <div className="flex justify-center items-center px-4  w-full sm:max-w-3xl lg:max-w-5xl xl:px-0 min-h-[70vh]">
               <Suspense fallback={<Loader2 size={30} className="animate-spin" />}>
                 {children}
                 <Toaster richColors closeButton />

@@ -14,7 +14,7 @@ export default function Navbar() {
       <div className="py-4 justify-between flex items-center px-4 w-full sm:max-w-3xl lg:max-w-5xl xl:px-0">
         {/* logo */}
         <Link prefetch={true} href="/" className="transition scroll-m-20 text-xl font-semibold tracking-tight">
-          Dstilez Auto - Admin
+          Dstilez Auto - AP
         </Link>
 
         <div className="flex justify-start items-center gap-3 ">

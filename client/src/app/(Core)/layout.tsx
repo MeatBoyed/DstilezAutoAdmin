@@ -8,7 +8,7 @@ export default async function RootLayout({
 }>) {
   // If the user does not have the admin role, redirect them to the home page
   if (!checkRole("admin")) {
-    redirect("/sign-up");
+    redirect("/notallowed");
   }
   return <>{children}</>;
 }
