@@ -8,7 +8,7 @@ export default function HomePage() {
         <div className="flex justify-center items-center flex-col gap-2">
           <h2 className="scroll-m-20  pb-2 text-3xl font-semibold tracking-tight first:mt-0">Ooops 🫤</h2>
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-center">
-            Your account doesn't have access to Dstilez Auto Admin Panel.
+            Your account doesn&apos;t have access to Dstilez Auto Admin Panel.
           </h1>
         </div>
         <div className="text-lg font-semibold">If you should have access, contact the appropriate person at Dstilez Auto.</div>
