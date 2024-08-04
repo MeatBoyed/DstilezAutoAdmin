@@ -13,7 +13,7 @@ export default function Navbar() {
     <nav className=" w-full bg-white z-50 flex justify-center items-center border-b shadow-sm">
       <div className="py-4 justify-between flex items-center flex-wrap px-4 w-full sm:max-w-3xl lg:max-w-5xl xl:px-0">
         {/* logo */}
-        <Link prefetch={true} href="/" className="transition scroll-m-20 text-xl font-semibold tracking-tight">
+        <Link prefetch={true} target="_blank" href="/" className="transition scroll-m-20 text-xl font-semibold tracking-tight">
           Dstilez Auto - Admin
         </Link>
 
@@ -48,7 +48,7 @@ function MainNavSlider() {
         <MenuIcon size={25} />
       </SheetTrigger>
       <SheetContent className="flex justify-between py-80 items-start flex-col shadow-lg">
-        <Link href="https://www.dstilezauto.co.za/">
+        <Link target="_blank" href="https://www.dstilezauto.co.za/">
           <p className={cn("text-base hover:text-gray-700 transition")}>Dstilez Auto</p>
         </Link>
         <Link prefetch={true} href="/feedback">
@@ -65,7 +65,7 @@ export function MainNavlinks({ className }: { className?: string }) {
       <Link prefetch={true} href="/">
         <p className={cn("text-base hover:text-gray-700 transition", className)}>Home</p>
       </Link>
-      <Link href="https://www.dstilezauto.co.za/">
+      <Link target="_blank" href="https://www.dstilezauto.co.za/">
         <p className={cn("text-base hover:text-gray-700 transition", className)}>Dstilez Auto</p>
       </Link>
       <Link prefetch={true} href="/feedback">

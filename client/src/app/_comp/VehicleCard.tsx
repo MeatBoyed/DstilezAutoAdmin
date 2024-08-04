@@ -60,7 +60,7 @@ export function VehicleCard({ vehicle, className }: { vehicle: Vehicle; classNam
           </Link>
           <p className="text-lg font-semibold">R {vehicle.price.toLocaleString()}</p>
         </div>
-        <Link href={livePath} className="flex justify-center gap-2 items-center min-h-fit">
+        <Link href={livePath} target="_blank" className="flex justify-center gap-2 items-center min-h-fit">
           <Eye size={18} />
           <p className="line-clamp-2 text-sm  font-medium leading-3">View Live</p>
         </Link>

@@ -44,7 +44,11 @@ export default function FormHead({
       <div className="flex justify-center items-center gap-2">
         {/* View Live - button */}
         {updateHead && content.liveLink && (
-          <Link href={content.liveLink} className={buttonVariants({ variant: "outline", className: "gap-2", size: "sm" })}>
+          <Link
+            href={content.liveLink}
+            target="_blank"
+            className={buttonVariants({ variant: "outline", className: "gap-2", size: "sm" })}
+          >
             <EyeIcon size={16} />
             View live
           </Link>
