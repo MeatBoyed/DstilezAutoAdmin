@@ -5,7 +5,7 @@ import { VehicleCard } from "./VehicleCard";
 import { OrderByEnum, PaginationResponse } from "@/server/util/BusinessLogic";
 import useSWR from "swr";
 import SearchBar from "@/components/SearchBar";
-import { searchParams } from "../page";
+import { searchParams } from "../(Core)/page";
 import { useRouter } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 

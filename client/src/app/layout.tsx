@@ -7,8 +7,7 @@ import { Toaster } from "sonner";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import Footer from "@/components/Footer";
-import { ClerkProvider, SignIn } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 

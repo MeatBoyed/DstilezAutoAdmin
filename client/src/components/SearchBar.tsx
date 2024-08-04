@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { useRouter } from "next/navigation";
 import { OrderByEnum } from "@/server/util/BusinessLogic";
 import { SelectMakes } from "@/lib/formData";
-import { searchParams } from "@/app/page";
+import { searchParams } from "@/app/(Core)/page";
 import { SearchFilters } from "./SearchFilters";
 import { useState } from "react";
 interface Searchprops {

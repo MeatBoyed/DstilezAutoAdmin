@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
-import FeedBackForm from "../_comp/FeedbackForm";
+import FeedBackForm from "../../_comp/FeedbackForm";
 
 export default async function FeedbackPage() {
   const a = await auth();

@@ -8,7 +8,7 @@ import {
   PaginationNext,
 } from "@/components/ui/pagination";
 import React from "react";
-import { searchParams } from "../page";
+import { searchParams } from "../(Core)/page";
 
 export function PaginationController({
   totalPages,

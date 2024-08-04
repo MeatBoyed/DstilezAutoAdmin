@@ -1,4 +1,4 @@
-import Vehicles, { VehiclesSkeleton } from "./_comp/Vehicles";
+import Vehicles, { VehiclesSkeleton } from "../_comp/Vehicles";
 import { Suspense } from "react";
 import SearchBar from "@/components/SearchBar";
 
