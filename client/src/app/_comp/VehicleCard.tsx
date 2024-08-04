@@ -10,6 +10,7 @@ import { s3Converter } from "@/server/util/BusinessLayer";
 
 export function VehicleCard({ vehicle, className }: { vehicle: Vehicle; className?: string }) {
   const VehiclePath = `/vehicle/${vehicle.stockId}`;
+  const livePath = `https://www.dstilezauto.co.za/view-car/${vehicle.stockId}`;
   return (
     <Card className="border-0  md:min-w-fit min-w-max bg-transparent">
       <div className={cn("relative w-full overflow-hidden rounded-xl  hover:cursor-pointer", className)}>
@@ -33,8 +34,8 @@ export function VehicleCard({ vehicle, className }: { vehicle: Vehicle; classNam
           )}
         </div>
       </div>
-      <CardContent className="px-1 flex flex-col gap-3 pt-4">
-        <div className="flex gap-3 justify-start items-center flex-wrap">
+      <CardContent className="px-1 flex flex-col items-start gap-3 pt-4">
+        <div className="flex gap-3 justify-start items-center max-w-full">
           <div className="flex justify-center items-center gap-1">
             <Calendar size={18} />
             <p className="leading-7 text-sm">{vehicle.year}</p>
@@ -53,10 +54,16 @@ export function VehicleCard({ vehicle, className }: { vehicle: Vehicle; classNam
           </div>
         </div>
 
-        <Link href={VehiclePath} className="w-full h-full">
-          <p className="line-clamp-1 text-sm font-medium leading-none">{vehicle.title}</p>
+        <div className="flex justify-center items-start gap-2 flex-col">
+          <Link href={VehiclePath} className="w-full min-h-fit">
+            <p className="line-clamp-2 text-base  font-medium ">{vehicle.title}</p>
+          </Link>
+          <p className="text-lg font-semibold">R {vehicle.price.toLocaleString()}</p>
+        </div>
+        <Link href={livePath} className="flex justify-center gap-2 items-center min-h-fit">
+          <Eye size={18} />
+          <p className="line-clamp-2 text-sm  font-medium leading-3">View Live</p>
         </Link>
-        <p className="text-lg font-semibold">R {vehicle.price.toLocaleString()}</p>
       </CardContent>
     </Card>
   );

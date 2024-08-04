@@ -28,7 +28,7 @@ export default function Vehicles({ searchParams }: { searchParams: searchParams 
     <div className="flex justify-center items-center flex-col gap-5 w-full">
       {isLoading && !error && <VehiclesSkeleton />}
       {error && !isLoading && <p>Oops! Looks like there are no vehicles available. Changing it up, and trying again.</p>}
-      {data && (
+      {data && !isLoading && !error && (
         <div className="w-full grid auto-rows-max gap-4">
           {/* <SearchBar /> */}
           <div className="flex justify-start items-center gap-3 max-w-xs">
