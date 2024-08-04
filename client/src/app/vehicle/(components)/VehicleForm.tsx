@@ -43,6 +43,7 @@ import { UploadShad } from "@/components/UploadShad/main";
 import { HTTPException } from "hono/http-exception";
 import { Badge } from "@/components/ui/badge";
 import { s3Converter } from "@/server/util/BusinessLayer";
+import FormHead from "./formHead";
 
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {
   const router = useRouter();
@@ -226,56 +227,17 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
             className="h-full w-full flex justify-start items-center flex-col gap-8"
           >
             {/* Head (Action Btns) */}
-            <div className="flex items-center justify-between w-full lg:max-w-7xl flex-wrap gap-4">
-              <div className="flex justify-center items-center gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-7 w-7 bg-white hidden sm:flex"
-                  type="button"
-                  onClick={() => router.back()}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  <span className="sr-only">Back</span>
-                </Button>
-                <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                  {!initVehicle ? "Create Vehicle" : "Edit Vehicle"}
-                </h1>
-              </div>
-              <div className="flex justify-center items-center gap-2">
-                {initVehicle && (
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant={"destructive"} size="sm" className="gap-2">
-                        <Trash2 size={16} className="text-black" />
-                        Delete
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Warning! This is can not be undone.</DialogTitle>
-                        <DialogDescription>
-                          Deleting this image will be a permanent action, and can not be undone.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter
-                        style={{ justifyContent: "space-between" }}
-                        className="flex p-0 m-0 justify-between items-center w-full"
-                      >
-                        <p className="text-sm font-normal ">Are you sure you want to do this?</p>
-                        <Button variant={"destructive"} type="button" onClick={async () => await deleteHandler()}>
-                          Confirm Delete
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                )}
-                <Button variant="outline" size="sm" type="submit" className="gap-2">
-                  <Save size={16} />
-                  {initVehicle ? "Save" : "Create"}
-                </Button>
-              </div>
-            </div>
+            <FormHead
+              content={{
+                createTitle: "Create vehicle",
+                editTitle: "Update vehicle",
+                dialogTitle: "Warning! This is can not be undone.",
+                dialogDescription: "Deleting this vehicle will be a permanent action, and can not be undone.",
+                liveLink: initVehicle && `https://www.dstilezauto.co.za/view-car/${initVehicle.stockId}`,
+              }}
+              deleteHandler={deleteHandler}
+              updateHead={!!initVehicle}
+            />
 
             {/* Form Inputs */}
             <div className="grid grid-cols-1 w-full gap-10 sm:grid-cols-2 sm:items-start lg:max-w-7xl">
