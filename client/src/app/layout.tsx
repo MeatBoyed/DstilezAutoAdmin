@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
-import { siteConfig } from "@/lib/SiteConfig";
+import { siteConfig } from "@/lib/siteConfig";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 

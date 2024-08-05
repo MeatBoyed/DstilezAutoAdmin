@@ -21,7 +21,7 @@ export const OrderByEnum = z.enum([
   "year-desc",
 ]);
 
-interface PaginationQuery {
+interface VehiclePaginationQuery {
   page: number; // Page number for pagination
   pageSize: number; // Page number for pagination
   where: PrismaFindManyArgs<"Vehicle">["where"]; // Filtering conditions for the query
@@ -30,19 +30,19 @@ interface PaginationQuery {
   include?: PrismaFindManyArgs<"Vehicle">["include"];
 }
 
-export interface PaginationResponse {
+export interface VehiclePaginationResponse {
   items: Vehicle[];
   totalCount: number;
   totalPages: number;
 }
 
-export async function PaginationRequest({
+export async function VehiclePaginationRequest({
   page,
   pageSize,
   where,
   sortBy,
   include,
-}: PaginationQuery): Promise<PaginationResponse> {
+}: VehiclePaginationQuery): Promise<VehiclePaginationResponse> {
   console.log("Page Number: ", page);
   let orderBy: Prisma.VehicleOrderByWithRelationInput = { price: "desc" };
 

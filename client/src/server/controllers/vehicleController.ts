@@ -7,7 +7,7 @@ import { createVehicleObject } from "../util/utils";
 import { PostImageError, PostImagesResponse, UploadedImages } from "@/components/UploadShad/server/honoS3Types";
 import { DeleteImagesInS3, PostImagesToS3 } from "@/components/UploadShad/server/HonoS3";
 import { getAuth } from "@hono/clerk-auth";
-import { PaginationRequest } from "../util/BusinessLogic";
+import { VehiclePaginationRequest } from "../util/BusinessLogic";
 
 // TODO: Implement filtering of Delted Vehicles where applicable
 
@@ -28,7 +28,7 @@ export default new Hono()
     await authenticateUser(c);
 
     return c.json(
-      await PaginationRequest({
+      await VehiclePaginationRequest({
         page: typeof page === "string" ? parseInt(page) : 1,
         pageSize: pageSize ? parseInt(pageSize) : VEHICLES_PER_PAGE,
         where: {
