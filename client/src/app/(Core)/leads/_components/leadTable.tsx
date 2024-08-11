@@ -15,11 +15,15 @@ import {
   PaginationLink,
   PaginationNext,
 } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
-import { DialogHeader, DialogFooter, DialogContent, Dialog, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import LeadDialog from "./leadDialog";
+import { LeadPaginationResponse, LeadWithCustomerAndVehicle } from "@/server/util/BusinessLogic";
+import useSWR from "swr";
+import { leadSearchParams } from "../page";
+import { Lead } from "@prisma/client";
+import Link from "next/link";
+import { LinkIcon } from "lucide-react";
 
-export interface Lead {
+export interface OldLead {
   id: number;
   name: string;
   email: string;
@@ -29,115 +33,55 @@ export interface Lead {
   [key: string]: any;
 }
 
-export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
+export async function fetchVehicles(url: string) {
+  return fetch(`${url}`, {
+    method: "GET",
+  }).then((res) => res.json());
+}
+
+export default function LeadTable({
+  privacyMode,
+  searchParams,
+  data: { items, totalCount, totalPages },
+}: {
+  privacyMode?: boolean;
+  searchParams: leadSearchParams;
+  data: LeadPaginationResponse;
+}) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<{ key: string; order: string }>({ key: "name", order: "asc" });
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [selectedLead, setSelectedLead] = useState<Lead | undefined>(undefined);
-  const leads = useMemo<Lead[]>(() => {
-    return [
-      {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        phone: "555-1234",
-        company: "Acme Inc.",
-        status: "New",
-      },
-      {
-        id: 2,
-        name: "Jane Smith",
-        email: "jane@example.com",
-        phone: "555-5678",
-        company: "Globex Corp.",
-        status: "Contacted",
-      },
-      {
-        id: 3,
-        name: "Bob Johnson",
-        email: "bob@example.com",
-        phone: "555-9012",
-        company: "Stark Industries",
-        status: "Qualified",
-      },
-      {
-        id: 4,
-        name: "Alice Williams",
-        email: "alice@example.com",
-        phone: "555-3456",
-        company: "Wayne Enterprises",
-        status: "New",
-      },
-      {
-        id: 5,
-        name: "Tom Davis",
-        email: "tom@example.com",
-        phone: "555-7890",
-        company: "Oscorp",
-        status: "Contacted",
-      },
-      {
-        id: 6,
-        name: "Sarah Lee",
-        email: "sarah@example.com",
-        phone: "555-2345",
-        company: "Stark Industries",
-        status: "Qualified",
-      },
-      {
-        id: 7,
-        name: "Michael Brown",
-        email: "michael@example.com",
-        phone: "555-6789",
-        company: "Globex Corp.",
-        status: "New",
-      },
-      {
-        id: 8,
-        name: "Emily Wilson",
-        email: "emily@example.com",
-        phone: "555-0123",
-        company: "Wayne Enterprises",
-        status: "Contacted",
-      },
-      {
-        id: 9,
-        name: "David Lee",
-        email: "david@example.com",
-        phone: "555-4567",
-        company: "Oscorp",
-        status: "Qualified",
-      },
-      {
-        id: 10,
-        name: "Jessica Thompson",
-        email: "jessica@example.com",
-        phone: "555-8901",
-        company: "Acme Inc.",
-        status: "New",
-      },
-    ]
+  const page = parseInt(searchParams.page || "1");
+  const pageSize = parseInt(searchParams.pagesize || "5");
+  const [selectedLead, setSelectedLead] = useState<LeadWithCustomerAndVehicle | undefined>(undefined);
+
+  const leads = useMemo<LeadWithCustomerAndVehicle[]>(() => {
+    return items
       .filter((lead) => {
         const searchValue = search.toLowerCase();
         return (
-          lead.name.toLowerCase().includes(searchValue) ||
-          lead.email.toLowerCase().includes(searchValue) ||
-          lead.phone.toLowerCase().includes(searchValue) ||
-          lead.company.toLowerCase().includes(searchValue) ||
+          lead.Customer?.name.toLowerCase().includes(searchValue) ||
+          lead.Customer?.email.toLowerCase().includes(searchValue) ||
+          lead.Customer?.phoneNumber.toLowerCase().includes(searchValue) ||
+          lead.stockId?.toString().toLowerCase().includes(searchValue) ||
           lead.status.toLowerCase().includes(searchValue)
         );
       })
-      .sort((a: Lead, b: Lead) => {
+      .sort((a: LeadWithCustomerAndVehicle, b: LeadWithCustomerAndVehicle) => {
+        const valueA = a[sort.key as keyof Lead] ?? "";
+        const valueB = b[sort.key as keyof Lead] ?? "";
         if (sort.order === "asc") {
-          return a[sort.key] > b[sort.key] ? 1 : -1;
+          return valueA > valueB ? 1 : -1;
         } else {
-          return a[sort.key] < b[sort.key] ? 1 : -1;
+          return valueA < valueB ? 1 : -1;
         }
       })
       .slice((page - 1) * pageSize, page * pageSize);
-  }, [search, sort, page, pageSize]);
-  const totalPages = Math.ceil(leads.length / pageSize);
+  }, [items, search, sort, page, pageSize]);
+
+  // const totalPages = Math.ceil(leads.length / pageSize);
+
+  console.log("Leads: ", leads);
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -159,10 +103,10 @@ export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
               <Select
                 value={pageSize.toString()}
                 defaultValue={pageSize.toString()}
-                onValueChange={(e) => setPageSize(parseInt(e))}
+                // onValueChange={(e) => setPageSize(parseInt(e))}
               >
                 <SelectTrigger className="min-w-max">
-                  <SelectValue placeholder="Per page" className="focus:ring-0" />
+                  <SelectValue defaultValue={pageSize.toString()} placeholder="Per page" className="focus:ring-0" />
                 </SelectTrigger>
                 <SelectContent className="w-full" align="end">
                   <SelectItem value="10">5</SelectItem>
@@ -226,7 +170,7 @@ export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
                     })
                   }
                 >
-                  Company
+                  Vehicle
                   {sort.key === "company" && <span className="ml-1">{sort.order === "asc" ? "\u2191" : "\u2193"}</span>}
                 </TableHead>
                 <TableHead
@@ -247,10 +191,18 @@ export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
             <TableBody>
               {leads.map((lead) => (
                 <TableRow key={lead.id} onClick={() => setSelectedLead(lead)} className="cursor-pointer hover:bg-muted">
-                  <TableCell>{lead.name}</TableCell>
-                  {/* <TableCell>{lead.email}</TableCell> */}
-                  {/* <TableCell>{lead.phone}</TableCell> */}
-                  <TableCell>{lead.company}</TableCell>
+                  <TableCell>{lead.Customer?.name}</TableCell>
+                  {!privacyMode && <TableCell>{lead.Customer?.email}</TableCell>}
+                  {!privacyMode && <TableCell>{lead.Customer?.phoneNumber}</TableCell>}
+                  <TableCell>
+                    <Link
+                      target="_blank"
+                      href={`dstilezauto.co.za/view-car/${lead.stockId}`}
+                      className="flex justify-center items-center gap-2"
+                    >
+                      {lead.stockId} <LinkIcon size={14} />
+                    </Link>
+                  </TableCell>
                   <TableCell>
                     <Badge variant={lead.status === "New" ? "outline" : lead.status === "Contacted" ? "secondary" : "default"}>
                       {lead.status}
@@ -271,21 +223,21 @@ export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
                 <PaginationItem>
                   <PaginationPrevious
                     href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPage(Math.max(page - 1, 1));
-                    }}
+                    // onClick={(e) => {
+                    //   e.preventDefault();
+                    //   setPage(Math.max(page - 1, 1));
+                    // }}
                     // disabled={!!!(page === 1)}
                   />
                 </PaginationItem>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                {Array.from({ length: 3 }, (_, i) => i + 1).map((p) => (
                   <PaginationItem key={p}>
                     <PaginationLink
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPage(p);
-                      }}
+                      href="/"
+                      // onClick={(e) => {
+                      //   e.preventDefault();
+                      //   setPage(p);
+                      // }}
                       isActive={p === page}
                     >
                       {p}
@@ -295,10 +247,10 @@ export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
                 <PaginationItem>
                   <PaginationNext
                     href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPage(Math.min(page + 1, totalPages));
-                    }}
+                    // onClick={(e) => {
+                    //   e.preventDefault();
+                    //   setPage(Math.min(page + 1, totalPages));
+                    // }}
                     // disabled={page === totalPages}
                   />
                 </PaginationItem>
@@ -308,7 +260,9 @@ export default function LeadTable({ privacyMode }: { privacyMode?: boolean }) {
         </div>
       </CardContent>
       {/* Lead Dialog */}
-      {selectedLead && <LeadDialog privacyMode lead={selectedLead} onOpenChange={() => setSelectedLead(undefined)} />}
+      {selectedLead && (
+        <LeadDialog privacyMode={privacyMode} lead={selectedLead} onOpenChange={() => setSelectedLead(undefined)} />
+      )}
     </Card>
   );
 }

@@ -2,7 +2,7 @@
 import { VehicleCardSkeleton } from "@/app/_comp/VehicleCardSkeleton";
 import { PaginationController } from "./PaginationController";
 import { VehicleCard } from "./VehicleCard";
-import { OrderByEnum, PaginationResponse } from "@/server/util/BusinessLogic";
+import { OrderByEnum, VehiclePaginationResponse } from "@/server/util/BusinessLogic";
 import useSWR from "swr";
 import SearchBar from "@/components/SearchBar";
 import { searchParams } from "../(Core)/page";
@@ -17,7 +17,7 @@ export async function fetchVehicles(url: string) {
 
 // TODO: Make server side with Search Params
 export default function Vehicles({ searchParams }: { searchParams: searchParams }) {
-  const { data, error, isLoading } = useSWR<PaginationResponse>(
+  const { data, error, isLoading } = useSWR<VehiclePaginationResponse>(
     `/api/vehicles/?page=${searchParams.page || 1}&order=${searchParams.order}&fueltype=${searchParams.fueltype}&make=${
       searchParams.make
     }&transmission=${searchParams.transmission}&bodytype=${searchParams.bodytype}&color=${searchParams.color}`,

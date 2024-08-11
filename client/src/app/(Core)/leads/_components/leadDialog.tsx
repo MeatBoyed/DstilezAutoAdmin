@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Lead } from "./leadTable";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { LeadWithCustomerAndVehicle } from "@/server/util/BusinessLogic";
 
 export default function LeadDialog({
   lead,
   onOpenChange,
   privacyMode,
 }: {
-  lead: Lead;
+  lead: LeadWithCustomerAndVehicle;
   onOpenChange: () => void;
   privacyMode?: boolean;
 }) {
@@ -18,7 +18,7 @@ export default function LeadDialog({
     <Dialog open={!!lead} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{lead.name}</DialogTitle>
+          <DialogTitle>{lead.Customer?.name}</DialogTitle>
           <DialogDescription>View details for this lead.</DialogDescription>
         </DialogHeader>
         <div className="grid  gap-4 py-4">
@@ -26,14 +26,20 @@ export default function LeadDialog({
             <Label htmlFor="email" className="text-right">
               Name
             </Label>
-            <div className="col-span-3">{lead.name}</div>
+            <div className="col-span-3">{lead.Customer?.name}</div>
+          </div>
+          <div className="grid items-center grid-cols-4 gap-4">
+            <Label htmlFor="company" className="text-right">
+              Surname
+            </Label>
+            <div className="col-span-3">{lead.Customer?.surname}</div>
           </div>
           {!privacyMode && (
             <div className="grid items-center grid-cols-4 gap-4">
               <Label htmlFor="email" className="text-right">
                 Email
               </Label>
-              <div className="col-span-3">{lead.email}</div>
+              <div className="col-span-3">{lead.Customer?.email}</div>
             </div>
           )}
           {!privacyMode && (
@@ -41,15 +47,9 @@ export default function LeadDialog({
               <Label htmlFor="phone" className="text-right">
                 Phone
               </Label>
-              <div className="col-span-3">{lead.phone}</div>
+              <div className="col-span-3">{lead.Customer?.phoneNumber}</div>
             </div>
           )}
-          <div className="grid items-center grid-cols-4 gap-4">
-            <Label htmlFor="company" className="text-right">
-              Company
-            </Label>
-            <div className="col-span-3">{lead.company}</div>
-          </div>
           <div className="grid items-center grid-cols-4 gap-4">
             <Label htmlFor="status" className="text-right">
               Status
@@ -69,7 +69,7 @@ export default function LeadDialog({
   );
 }
 
-function ForwardLead({ leadId }: { leadId: number }) {
+function ForwardLead({ leadId }: { leadId: string }) {
   return (
     <div className="w-full flex justify-center items-center flex-col gap-3">
       <div className="w-full flex justify-center items-center gap-3">

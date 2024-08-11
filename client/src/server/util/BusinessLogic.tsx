@@ -1,6 +1,6 @@
-import { Prisma, Vehicle } from "@prisma/client";
+import { Lead, Prisma, Vehicle } from "@prisma/client";
 import db from "./database";
-import { z } from "zod";
+import { tuple, z } from "zod";
 
 export type ModelNames = (typeof Prisma.ModelName)[keyof typeof Prisma.ModelName];
 
@@ -30,8 +30,27 @@ interface VehiclePaginationQuery {
   include?: PrismaFindManyArgs<"Vehicle">["include"];
 }
 
+interface LeadPaginationQuery {
+  page: number; // Page number for pagination
+  pageSize: number; // Page number for pagination
+  where?: PrismaFindManyArgs<"Lead">["where"]; // Filtering conditions for the query
+  sortBy?: string;
+  select?: PrismaFindManyArgs<"Lead">["select"];
+  include?: PrismaFindManyArgs<"Lead">["include"];
+}
+
 export interface VehiclePaginationResponse {
   items: Vehicle[];
+  totalCount: number;
+  totalPages: number;
+}
+
+export type LeadWithCustomerAndVehicle = Prisma.LeadGetPayload<{
+  include: { Customer: true; Vehicle: true };
+}>;
+
+export interface LeadPaginationResponse {
+  items: LeadWithCustomerAndVehicle[];
   totalCount: number;
   totalPages: number;
 }
@@ -79,6 +98,32 @@ export async function VehiclePaginationRequest({
   const totalCount = await db.vehicle.count({ where }); // Get the total count of items satisfying the provided conditions
 
   const items = await db.vehicle.findMany({ where, orderBy, skip, take: pageSize });
+
+  return {
+    items,
+    totalCount,
+    totalPages: Math.ceil(totalCount / pageSize),
+  };
+}
+
+export async function LeadPaginationRequest({
+  page,
+  pageSize,
+  where,
+  sortBy,
+  // include,
+  select,
+}: LeadPaginationQuery): Promise<LeadPaginationResponse> {
+  console.log("Page Number: ", page);
+  // let orderBy: Prisma.VehicleOrderByWithRelationInput = { price: "desc" };
+
+  const skip = (+page - 1) * +pageSize; // Calculate the number of items to skip based on the current page and page size
+
+  const totalCount = await db.lead.count({ where }); // Get the total count of items satisfying the provided conditions
+
+  const items = await db.lead.findMany({ where, skip, take: pageSize, include: { Customer: true, Vehicle: true } });
+
+  const leads = await db.lead.findMany({ include: { Customer: true } });
 
   return {
     items,
