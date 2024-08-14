@@ -1,7 +1,7 @@
 import { FileRejection } from "react-dropzone";
 import { toast } from "sonner";
 import { computeSHA256, formatBytes } from "./Utils";
-import { env } from "../../../../../env";
+import { env } from "../../../../env";
 
 // Displays a toast when a file is rejected based on their error reason
 export const handleRejectedFiles = (rejectedFiles: FileRejection[], maxSize: number) =>
