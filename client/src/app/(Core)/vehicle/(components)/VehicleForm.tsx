@@ -36,8 +36,8 @@ import { HTTPException } from "hono/http-exception";
 import { Badge } from "@/components/ui/badge";
 import { s3Converter } from "@/server/util/BusinessLayer";
 import FormHead from "./formHead";
-import { FileInput } from "@/components/UploadShad/main/FileInput";
-import FilesPreview from "@/components/UploadShad/main/FilesPreview";
+import { FileInput } from "@/components/UploadShad/FileInput";
+import FilesPreview from "@/components/UploadShad/FilesPreview";
 
 const MAXSIZE = 5 * 1024 * 1024;
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {
