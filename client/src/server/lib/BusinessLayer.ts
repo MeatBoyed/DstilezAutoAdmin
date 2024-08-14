@@ -2,7 +2,7 @@ import S3Service from "@/components/UploadShad/server/S3Service";
 import db from "../util/database";
 import { z } from "zod";
 import { VehicleFormSchema, VehicleSchemaType } from "@/lib/Formlibs";
-import { createVehicle, createVehicleObject } from "../util/utils";
+import { createVehicle } from "../util/utils";
 import { Vehicle } from "@prisma/client";
 
 class BusinessLayer {
