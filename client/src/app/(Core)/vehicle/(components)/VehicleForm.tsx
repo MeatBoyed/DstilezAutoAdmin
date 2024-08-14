@@ -31,13 +31,13 @@ import {
 import { Vehicle } from "@prisma/client";
 import { DeleteVehicle, PostVehicle } from "@/server/requestLib";
 import { toast } from "sonner";
-import { UploadShad } from "@/components/Upload-Shad/main/main";
+import { UploadShad } from "@/components/UploadShad/main";
 import { HTTPException } from "hono/http-exception";
 import { Badge } from "@/components/ui/badge";
 import { s3Converter } from "@/server/util/BusinessLayer";
 import FormHead from "./formHead";
-import { FileInput } from "@/components/Upload-Shad/main/FileInput";
-import FilesPreview from "@/components/Upload-Shad/main/FilesPreview";
+import { FileInput } from "@/components/UploadShad/main/FileInput";
+import FilesPreview from "@/components/UploadShad/main/FilesPreview";
 
 const MAXSIZE = 5 * 1024 * 1024;
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {

@@ -1,17 +1,11 @@
 import { Context, Hono } from "hono";
 import db from "../util/database";
 import { HTTPException } from "hono/http-exception";
-import { validator } from "hono/validator";
-import { ParseVehicleFormData } from "../util/FormDataConverters";
-import { createVehicleObject } from "../util/utils";
-import { PostImageError, PostImagesResponse, UploadedImages } from "@/components/UploadShad/server/honoS3Types";
-import { DeleteImagesInS3, PostImagesToS3 } from "@/components/UploadShad/server/HonoS3";
 import { getAuth } from "@hono/clerk-auth";
 import { VehiclePaginationRequest } from "../util/BusinessLogic";
-import S3Service from "@/components/Upload-Shad/main/server/S3Service";
+import S3Service from "@/components/UploadShad/server/S3Service";
 import BusinessLayer from "../lib/BusinessLayer";
 import { VehicleSchema } from "@/lib/Formlibs";
-import { zValidator } from "@hono/zod-validator";
 
 // TODO: Implement filtering of Delted Vehicles where applicable
 
@@ -155,33 +149,6 @@ async function checkVehicleExists(stockId: number) {
       select: { stockId: true },
     })
     .then((res) => (res ? res.stockId : 0));
-}
-
-async function manageImages(
-  stockId: number,
-  images: any[],
-  imagesOrder: string[],
-  BASE_URL: string
-): Promise<{ images: UploadedImages[]; error: string }> {
-  let newImages: UploadedImages[] = [];
-  let uploadRes: PostImagesResponse;
-
-  // Skip uploading and formatting if there are no new images
-  if (images.length > 0) {
-    uploadRes = await PostImagesToS3(stockId.toString(), stockId.toString(), images);
-    if (uploadRes.error != PostImageError.NoError) return { images: [], error: uploadRes.error.toString() };
-  }
-
-  // Ensure Uploaded & existing images are in the correct order - By matching Names and URLs
-  imagesOrder.forEach((imageId) => {
-    // Push straight if it's a URL
-    if (imageId.startsWith(BASE_URL)) return newImages.push({ fileName: imageId, url: imageId });
-
-    // Find uploaded image that matches fileName
-    uploadRes.images.forEach((image) => image.fileName === imageId && newImages.push(image));
-  });
-
-  return { images: newImages, error: "" };
 }
 
 /**

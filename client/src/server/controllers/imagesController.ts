@@ -1,5 +1,5 @@
-import { deleteFile, getSignedURL } from "@/components/Upload-Shad/main/server/actions";
-import S3Service from "@/components/Upload-Shad/main/server/S3Service";
+import { deleteFile, getSignedURL } from "@/components/UploadShad/server/actions";
+import S3Service from "@/components/UploadShad/server/S3Service";
 import { getAuth } from "@hono/clerk-auth";
 import { Context, Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
