@@ -1,7 +1,9 @@
-import { VehicleFormSchema } from "@/lib/Formlibs";
+import { VehicleFormSchema, VehicleSchema } from "@/lib/Formlibs";
 import { VehicleToFormData } from "./util/FormDataConverters";
 import { z } from "zod";
 import { FeedBackFormSchema } from "./controllers/feedbackController";
+
+// NOTE: These methods are implicitaly run client side, therefore no Authentication header is being used
 
 export async function PostVehicle(
   url: string,
@@ -9,14 +11,20 @@ export async function PostVehicle(
     arg,
   }: {
     arg: {
-      vehicle: z.infer<typeof VehicleFormSchema>;
+      vehicle: z.infer<typeof VehicleSchema>;
     };
   }
 ) {
   return fetch(url, {
     method: "POST",
-    body: VehicleToFormData(arg.vehicle),
-  }).then((res) => res.json());
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(arg.vehicle),
+  }).then((res) => {
+    console.log("Response: ", res);
+    return res.json();
+  });
 }
 
 export async function DeleteVehicle(url: string) {

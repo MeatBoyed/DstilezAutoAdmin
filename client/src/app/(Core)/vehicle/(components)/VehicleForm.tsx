@@ -14,16 +14,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { MAXFILES, MINFILES, VehicleFormSchema } from "@/lib/Formlibs";
+
+import { MAXFILES, MINFILES, VehicleSchema } from "@/lib/Formlibs";
 import {
   BodyTypes,
   Colours,
@@ -39,12 +31,15 @@ import {
 import { Vehicle } from "@prisma/client";
 import { DeleteVehicle, PostVehicle } from "@/server/requestLib";
 import { toast } from "sonner";
-import { UploadShad } from "@/components/UploadShad/main";
+import { UploadShad } from "@/components/Upload-Shad/main/main";
 import { HTTPException } from "hono/http-exception";
 import { Badge } from "@/components/ui/badge";
 import { s3Converter } from "@/server/util/BusinessLayer";
 import FormHead from "./formHead";
+import { FileInput } from "@/components/Upload-Shad/main/FileInput";
+import FilesPreview from "@/components/Upload-Shad/main/FilesPreview";
 
+const MAXSIZE = 5 * 1024 * 1024;
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {
   const router = useRouter();
 
@@ -63,7 +58,7 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
     });
   };
 
-  const defaultValues: z.infer<typeof VehicleFormSchema> = {
+  const defaultValues: z.infer<typeof VehicleSchema> = {
     stockId: initVehicle?.stockId || 0,
     title: initVehicle?.title || "",
     make: initVehicle ? Makes.find((make) => make == initVehicle.make) || "Alfa Romeo" : "Abarth",
@@ -82,8 +77,8 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
     newUsed: initVehicle ? NewOrUsed.find((value) => value === initVehicle.newUsed) || "Used" : "Used",
     mmCode: initVehicle?.mmCode || 0,
   };
-  const form = useForm<z.infer<typeof VehicleFormSchema>>({
-    resolver: zodResolver(VehicleFormSchema),
+  const form = useForm<z.infer<typeof VehicleSchema>>({
+    resolver: zodResolver(VehicleSchema),
     defaultValues: defaultValues,
   });
   const {
@@ -92,6 +87,7 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
     getValues,
     formState: { isDirty, isSubmitted, errors },
   } = form;
+  console.log("Form Errors: ", errors);
   // Extra Features's Tag management
   const [activeExtraTagIndex, setActiveExtraTagIndex] = useState<number | null>(null);
 
@@ -131,7 +127,7 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
         toast.error("Something unexpected happened. Please try again");
       },
       onSuccess: (data: Vehicle) => {
-        const createdVehicle: z.infer<typeof VehicleFormSchema> = {
+        const createdVehicle: z.infer<typeof VehicleSchema> = {
           stockId: data.stockId,
           title: data.title,
           make: data ? Makes.find((make) => make == data.make) || "Alfa Romeo" : "Abarth",
@@ -180,31 +176,12 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
     }
   );
 
-  async function submitHandler(values: z.infer<typeof VehicleFormSchema>) {
+  async function submitHandler(values: z.infer<typeof VehicleSchema>) {
     console.log("Hello!");
     console.log("Submitted Form: ", values);
 
-    if (!initVehicle) {
-      if (values.images.length < MINFILES) {
-        setError("images", {
-          message: `There must be at least ${MINFILES} Image.`,
-        });
-        return;
-      }
-
-      await triggerCreate({ vehicle: values });
-    } else {
-      if (values.imagesOrder && values.imagesOrder.length < MINFILES) {
-        setError("images", {
-          message: `There must be at least ${MINFILES} Image.`,
-        });
-        return;
-      }
-
-      await triggerUpdate({
-        vehicle: values,
-      });
-    }
+    if (!initVehicle) await triggerCreate({ vehicle: values });
+    else await triggerUpdate({ vehicle: values });
   }
 
   async function deleteHandler() {
@@ -597,19 +574,25 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
                           <FormMessage />
                           <FormControl className="px-0 sm:px-2 sm:pb-4">
                             <UploadShad
-                              maxFiles={MAXFILES}
-                              maxSize={5 * 1024 * 1024}
-                              defaultValues={initVehicle ? field.value : []}
-                              handleChange={(uploadedImages, deletedImages) => {
-                                console.log("Images: ", uploadedImages);
-                                if (initVehicle) {
-                                  if (deletedImages) setValue("deletedImages", deletedImages);
-                                  setValue("imagesOrder", uploadedImages.order); // Store File Order
-                                }
-                                setValue("images", uploadedImages.newImages); // Stores Uploaded Files
+                              defaultValues={field.value}
+                              handleChange={(files) => {
+                                setValue("images", files); // Stores Uploaded Files
+                                console.log("Formstate updated: ", form.getValues("images"));
                               }}
-                              customLoader={s3Converter}
-                            />
+                            >
+                              <FileInput customLoader={s3Converter} maxfiles={10} maxsize={5 * 1024 * 1024} />
+                              <FilesPreview customLoader={s3Converter}>
+                                <FilesPreview.Head>
+                                  <h3 className="text-xl font-semibold">Uploaded files</h3>
+                                  <CardDescription>
+                                    {/* {uploadedImages && uploadedImages?.length > 0
+              ? `You have uploaded ${uploadedImages?.length} images.`
+              : `You have no images uploaded yet.`} */}
+                                    You have no images uploaded yet
+                                  </CardDescription>
+                                </FilesPreview.Head>
+                              </FilesPreview>
+                            </UploadShad>
                           </FormControl>
                         </FormItem>
                       )}

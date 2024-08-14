@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.609.0",
-    "@clerk/nextjs": "^5.2.2",
+    "@aws-sdk/s3-request-presigner": "^3.629.0",
+    "@clerk/nextjs": "^5.3.1",
     "@hello-pangea/dnd": "^16.6.0",
     "@hono/clerk-auth": "^2.0.0",
     "@hono/zod-validator": "^0.2.2",
@@ -30,6 +31,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@t3-oss/env-nextjs": "^0.11.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "emblor": "^1.4.0",
@@ -52,7 +54,6 @@
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",
     "eslint": "^8",

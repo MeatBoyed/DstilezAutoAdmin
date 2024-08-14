@@ -5,7 +5,6 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { Resend } from "resend";
 
-// TODO: Implement filtering of Delted Vehicles where applicable
 export const FeedBackFormSchema = z.object({
   subject: z.string().min(3, { message: "Subject must be at least 3 characters long." }),
   email: z.string().email({ message: "Email address must be valid." }).optional(),

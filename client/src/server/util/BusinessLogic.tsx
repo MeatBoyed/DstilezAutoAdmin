@@ -123,8 +123,6 @@ export async function LeadPaginationRequest({
 
   const items = await db.lead.findMany({ where, skip, take: pageSize, include: { Customer: true, Vehicle: true } });
 
-  const leads = await db.lead.findMany({ include: { Customer: true } });
-
   return {
     items,
     totalCount,
