@@ -20,6 +20,12 @@ export const dynamicParams = true;
 //   }));
 // }
 
+export const metadata = {
+  title: "Edit a Vehicle",
+  description: "Dstilez Auto Admin - Edit a Vehicle",
+  // Inherits openGraph.title and openGraph.description
+};
+
 // Allow user's to request property features for us to add
 export default async function Page({ params }: { params: { stockid: string } }) {
   const data = await getData(params.stockid);

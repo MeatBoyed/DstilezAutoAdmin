@@ -2,9 +2,10 @@ import { VehicleCardSkeleton } from "@/app/_comp/VehicleCardSkeleton";
 import { PaginationController } from "./PaginationController";
 import { VehicleCard } from "./VehicleCard";
 import { searchParams } from "../(Core)/page";
-import { VehiclePaginationResponse } from "@/server/util/BusinessLogic";
+import { searchVehicles } from "@/lib/RequestService";
 
-export default async function Vehicles({ searchParams, data }: { data?: VehiclePaginationResponse; searchParams: searchParams }) {
+export default async function Vehicles({ searchParams }: { searchParams: searchParams }) {
+  const data = await searchVehicles(searchParams);
   if (!data)
     return (
       <div className="flex flex-col justify-center items-center gap-5">
