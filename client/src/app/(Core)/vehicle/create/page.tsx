@@ -1,7 +1,5 @@
 import VehicleForm from "../(components)/VehicleForm";
 
-export const dynamic = "force-static";
-
 // Allow user's to request property features for us to add
 export default async function CreatePropertyPage() {
   return (
