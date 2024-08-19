@@ -1,9 +1,9 @@
-import { auth, getAuth } from "@clerk/nextjs/server";
+"use server";
+import { auth } from "@clerk/nextjs/server";
 import { env } from "../../env";
 import { Vehicle } from "@prisma/client";
 import { searchParams } from "@/app/(Core)/page";
 import { VehiclePaginationResponse } from "@/server/util/BusinessLogic";
-import { VehicleSchemaType } from "./Formlibs";
 
 export async function getData(stockId?: string) {
   const { getToken } = auth();

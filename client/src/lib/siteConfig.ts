@@ -2,8 +2,34 @@
 export const siteConfig = {
   title: "Dstilez Auto Admin",
   description: "Dstilez Auto Admin - A comprehensive management tool for automotive needs.",
-  authors: [{ name: "Nerf Designs" }],
-  keywords: ["Auto", "Admin", "Management", "Dstilez"],
+  authors: [
+    {
+      name: "Nerf Designs",
+      url: "https://nerfdesigns.com/",
+    },
+    {
+      name: "Nerf Designs",
+      url: "https://charlesrossouw.dstilezauto.co.za/",
+    },
+  ],
+  creator: "Nerf Designs - Charles Rossouw",
+  keywords: [
+    "Auto",
+    "Admin",
+    "Management",
+    "Dstilez",
+    "shadcn",
+    "dstilez ",
+    "dstilez auto",
+    "dstilez auto admin",
+    "dstilez auto admin panel",
+    "nerf",
+    "nerfdesigns",
+    "nerf designs",
+    "input",
+    "radix ui",
+    "react tag input",
+  ],
   openGraph: {
     title: "Dstilez Auto Admin",
     description: "A comprehensive management tool for automotive needs.",
