@@ -1,6 +1,4 @@
-import StructuredData from "@/lib/StructuredData";
 import VehicleForm from "../(components)/VehicleForm";
-import { localBusinessData } from "@/lib/siteConfig";
 
 export const metadata = {
   title: "Create Vehicle",

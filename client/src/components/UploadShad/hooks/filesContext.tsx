@@ -1,6 +1,7 @@
 import React, { useState, createContext, useContext, useCallback } from "react";
 import { toast } from "sonner";
-import { handleDeleteFile, handleFetchSignedURL, handleUploadFile, reorder } from "../lib/ControllerLayer";
+import { handleDeleteFile, handleFetchSignedURL, handleUploadFile } from "../lib/ControllerLayer";
+import { reorder } from "../lib/Utils";
 
 export type FilesContextType = {
   /**
@@ -21,11 +22,12 @@ export function useFilesContext() {
 }
 
 export const FilesContextProvider: React.FC<{
-  onChange?: (files: string[]) => void;
+  folderId?: string;
   defaultValues?: string[];
-  metadata?: Record<string, string> | undefined;
   children: React.ReactNode;
-}> = ({ children, defaultValues, metadata, onChange }) => {
+  onChange?: (files: string[]) => void;
+  metadata?: Record<string, string> | undefined;
+}> = ({ children, defaultValues, metadata, folderId, onChange }) => {
   const [files, setFiles] = useState<string[]>(defaultValues || []);
   // const [files, setFiles] = useControllableState({
   //   onChange: onChange,
@@ -45,7 +47,7 @@ export const FilesContextProvider: React.FC<{
     const urls = await Promise.all(
       inputFiles.map(async (file) => {
         // Get Signed URL & Uploading
-        const signedUrl = await handleFetchSignedURL(file);
+        const signedUrl = await handleFetchSignedURL(file, folderId, metadata);
         const fileUploadResponse = await handleUploadFile(signedUrl, file);
 
         if (fileUploadResponse.failure || !fileUploadResponse.url) {

@@ -7,7 +7,7 @@ import { Tag, TagInput } from "emblor";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Eye, LoaderCircle, Save, Trash2, XCircle } from "lucide-react";
+import { ChevronLeft, Eye, LoaderCircle, Save, Trash2, TriangleAlertIcon, XCircle } from "lucide-react";
 
 import { z } from "zod";
 import { useEffect, useState } from "react";
@@ -38,10 +38,12 @@ import { s3Converter } from "@/server/util/BusinessLayer";
 import FormHead from "./formHead";
 import { FileInput } from "@/components/UploadShad/FileInput";
 import FilesPreview from "@/components/UploadShad/FilesPreview";
+import { useUser } from "@clerk/nextjs";
 
 const MAXSIZE = 5 * 1024 * 1024;
 export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) {
   const router = useRouter();
+  const { user } = useUser();
 
   const getExtras = (extras: string[]) => {
     console.log("Extras: ", extras.length);
@@ -575,23 +577,36 @@ export default function VehicleForm({ initVehicle }: { initVehicle?: Vehicle }) 
                           <FormControl className="px-0 sm:px-2 sm:pb-4">
                             <UploadShad
                               defaultValues={field.value}
+                              folderId={getValues("stockId").toString()}
+                              metadata={{ stockId: getValues("stockId").toString(), userId: user?.id ?? "" }}
                               handleChange={(files) => {
                                 setValue("images", files); // Stores Uploaded Files
                                 console.log("Formstate updated: ", form.getValues("images"));
                               }}
                             >
-                              <FileInput customLoader={s3Converter} maxfiles={10} maxsize={5 * 1024 * 1024} />
-                              <FilesPreview customLoader={s3Converter}>
-                                <FilesPreview.Head>
-                                  <h3 className="text-xl font-semibold">Uploaded files</h3>
-                                  <CardDescription>
-                                    {/* {uploadedImages && uploadedImages?.length > 0
+                              {getValues("stockId") > 0 ? (
+                                <>
+                                  <FileInput customLoader={s3Converter} maxfiles={10} maxsize={5 * 1024 * 1024} />
+                                  <FilesPreview customLoader={s3Converter}>
+                                    <FilesPreview.Head>
+                                      <h3 className="text-xl font-semibold">Uploaded files</h3>
+                                      <CardDescription>
+                                        {/* {uploadedImages && uploadedImages?.length > 0
               ? `You have uploaded ${uploadedImages?.length} images.`
               : `You have no images uploaded yet.`} */}
-                                    You have no images uploaded yet
-                                  </CardDescription>
-                                </FilesPreview.Head>
-                              </FilesPreview>
+                                        You have no images uploaded yet
+                                      </CardDescription>
+                                    </FilesPreview.Head>
+                                  </FilesPreview>
+                                </>
+                              ) : (
+                                <div className="flex flex-col gap-4 items-center justify-center mt-10">
+                                  <TriangleAlertIcon size={30} className="text-orange-500" />
+                                  <h1 className="flex-1 shrink-0 text-center text-lg font-semibold tracking-tight sm:grow-0">
+                                    Please enter a valid Stock-ID to upload images.
+                                  </h1>
+                                </div>
+                              )}
                             </UploadShad>
                           </FormControl>
                         </FormItem>

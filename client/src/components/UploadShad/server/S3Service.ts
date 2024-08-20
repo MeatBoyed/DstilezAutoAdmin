@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { env } from "../../../../env";
+import { AWSOptions, FilePayload } from "../types";
 
 class S3Service {
   private s3Client: S3Client;
@@ -24,7 +25,7 @@ class S3Service {
     return url.split(`${env.NEXT_PUBLIC_AWS_BASE_URL}/`)[1];
   }
 
-  async getSignedURL({ type, checksum, size, tag, metaData, folderId }: filePayload, { acceptedTypes, maxFileSize }: AWSOptions) {
+  async getSignedURL({ type, checksum, size, tag, metadata, folderId }: FilePayload, { acceptedTypes, maxFileSize }: AWSOptions) {
     // Validate request
     if (!acceptedTypes.includes(type)) {
       return { failure: "Not valid type" };
@@ -40,7 +41,7 @@ class S3Service {
       Key: key,
       Tagging: tag,
       ContentType: type,
-      Metadata: metaData,
+      Metadata: metadata,
       ContentLength: size,
       ChecksumSHA256: checksum,
       Bucket: env.AWS_BUCKET_NAME,
@@ -58,7 +59,7 @@ class S3Service {
     });
 
     try {
-      const response = await this.s3Client.send(command);
+      await this.s3Client.send(command);
       // console.log("AWS Delete Response: ", response);
       return { success: true };
     } catch (err) {
@@ -73,23 +74,6 @@ class S3Service {
       })
     );
   }
-}
-
-interface filePayload {
-  type: string;
-  size: number;
-  checksum: string;
-  /**
-   * Example: `<tagId>=<tagValue>`
-   */
-  tag?: string;
-  folderId?: string;
-  metaData?: Record<string, string> | undefined;
-}
-
-interface AWSOptions {
-  acceptedTypes: string[];
-  maxFileSize: number;
 }
 
 export default S3Service;

@@ -125,6 +125,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.4)
+      uploadshad:
+        specifier: ^1.1.1
+        version: 1.1.1
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -3671,6 +3674,9 @@ packages:
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
+  uploadshad@1.1.1:
+    resolution: {integrity: sha512-3P3qYgCPTm0hYWDFIrDWiIiXY+Cr61BaqedivRrxC+p/qoX9ztlOqMFVFfO3IMh392i+oJXVgkztSjRGAvobfg==}
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -8005,6 +8011,11 @@ snapshots:
       which-boxed-primitive: 1.0.2
 
   undici-types@5.26.5: {}
+
+  uploadshad@1.1.1:
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   uri-js@4.4.1:
     dependencies:

@@ -1,8 +1,9 @@
-import { deleteFile, getSignedURL } from "@/components/UploadShad/server/actions";
-import S3Service from "@/components/UploadShad/server/S3Service";
-import { getAuth } from "@hono/clerk-auth";
 import { Context, Hono } from "hono";
+import { getAuth } from "@hono/clerk-auth";
+import { zValidator } from "@hono/zod-validator";
 import { HTTPException } from "hono/http-exception";
+import S3Service from "@/components/UploadShad/server/S3Service";
+import { FilePayloadSchema } from "@/components/UploadShad/types";
 
 const acceptedTypes = ["image/png", "image/jpeg"];
 const maxFileSize = 10 * 1024 * 1024; // 10MB
@@ -10,23 +11,14 @@ const maxFileSize = 10 * 1024 * 1024; // 10MB
 const s3Service = new S3Service();
 
 export default new Hono()
-  .get("/", async (c) => {
+  .post("/", async (c) => {
     const { userId } = authenticateUser(c);
 
-    const { type, size, checksum } = c.req.query();
-    if (!type || !size || !checksum) throw new HTTPException(400, { message: "Missing query values" });
+    const raw = await c.req.raw.json();
+    const filePayload = FilePayloadSchema.safeParse(raw);
+    if (!filePayload.success || !filePayload.data) throw new HTTPException(405, { message: "Missing payload values" });
 
-    const signedURLResult = await getSignedURL(
-      {
-        size: parseInt(size),
-        checksum,
-        type,
-        metaData: {
-          userId: userId,
-        },
-      },
-      { acceptedTypes, maxFileSize }
-    );
+    const signedURLResult = await s3Service.getSignedURL(filePayload.data, { acceptedTypes, maxFileSize });
 
     if (signedURLResult.failure)
       throw new HTTPException(400, { message: "Failed to generate signed URL.", cause: signedURLResult.failure });
